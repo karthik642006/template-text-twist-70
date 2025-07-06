@@ -52,7 +52,7 @@ const ImageFieldControls = ({
               </Button>
             </div>
           </CardContent>
-        </div>
+        </Card>
       ))}
     </div>
   );

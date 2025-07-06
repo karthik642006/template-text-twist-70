@@ -1,25 +1,24 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Image, Play, Home, Library, MoreHorizontal, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TemplateGallery from "@/components/TemplateGallery";
 import GifGenerator from "@/components/GifGenerator";
 import TemplateSearch from "@/components/TemplateSearch";
+import HamburgerMenu from "@/components/HamburgerMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+
 const Index = () => {
   const [textPrompt, setTextPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string>("");
   const [activeTab, setActiveTab] = useState("home");
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
   const handleGenerateImage = async () => {
     if (!textPrompt.trim()) {
       toast({
@@ -59,6 +58,7 @@ const Index = () => {
       setIsGenerating(false);
     }
   };
+
   const handleUseTemplate = () => {
     if (generatedImage) {
       // Store the generated image in localStorage to pass to editor
@@ -66,6 +66,7 @@ const Index = () => {
       navigate('/editor/generated');
     }
   };
+
   const popularTemplates = [{
     id: 1,
     name: "Distracted Boyfriend",
@@ -83,6 +84,7 @@ const Index = () => {
     name: "Two Buttons",
     image: "https://i.imgflip.com/1g8my4.jpg"
   }];
+
   const animations = [{
     id: 1,
     name: "Curl Hair",
@@ -92,10 +94,13 @@ const Index = () => {
     name: "Fly Up",
     preview: "https://i.imgflip.com/30b1gx.jpg"
   }];
+
   if (activeTab === "templates") {
     return <TemplateGallery />;
   }
-  return <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Header */}
       <header className="flex items-center justify-between p-4 border-b border-gray-700">
         <div className="flex items-center space-x-2">
@@ -105,9 +110,7 @@ const Index = () => {
           <span className="text-xl font-bold">MemeGen</span>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-sm">K</span>
-          </div>
+          <HamburgerMenu />
         </div>
       </header>
 
@@ -127,24 +130,46 @@ const Index = () => {
               <CardTitle className="text-white">Text to Image</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Textarea placeholder="Describe the meme you want to create..." value={textPrompt} onChange={e => setTextPrompt(e.target.value)} className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 min-h-[100px]" />
-              <Button onClick={handleGenerateImage} disabled={isGenerating || !textPrompt.trim()} className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                {isGenerating ? <>
+              <Textarea 
+                placeholder="Describe the meme you want to create..." 
+                value={textPrompt} 
+                onChange={e => setTextPrompt(e.target.value)} 
+                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 min-h-[100px]" 
+              />
+              <Button 
+                onClick={handleGenerateImage} 
+                disabled={isGenerating || !textPrompt.trim()} 
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+              >
+                {isGenerating ? (
+                  <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Generating...
-                  </> : <>
+                  </>
+                ) : (
+                  <>
                     Generate Meme
                     <ArrowRight className="ml-2 h-4 w-4" />
-                  </>}
+                  </>
+                )}
               </Button>
 
               {/* Generated Image Display */}
-              {generatedImage && <div className="space-y-3">
-                  <img src={generatedImage} alt="Generated meme template" className="w-full h-64 object-cover rounded-lg border border-gray-600" />
-                  <Button onClick={handleUseTemplate} className="w-full bg-green-600 hover:bg-green-700">
+              {generatedImage && (
+                <div className="space-y-3">
+                  <img 
+                    src={generatedImage} 
+                    alt="Generated meme template" 
+                    className="w-full h-64 object-cover rounded-lg border border-gray-600" 
+                  />
+                  <Button 
+                    onClick={handleUseTemplate} 
+                    className="w-full bg-green-600 hover:bg-green-700"
+                  >
                     Use This Template
                   </Button>
-                </div>}
+                </div>
+              )}
             </CardContent>
           </Card>
         </section>
@@ -156,26 +181,9 @@ const Index = () => {
         <section>
           <GifGenerator />
         </section>
-
-        {/* Pick an Animation Section */}
-        
-
-        {/* Template Gallery Preview */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            
-            
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {popularTemplates.map(template => {})}
-          </div>
-        </section>
       </main>
-
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700">
-        
-      </nav>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
