@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -409,6 +410,7 @@ const MemeEditor = () => {
             <div 
               ref={containerRef} 
               className="relative bg-white rounded-lg shadow-lg overflow-hidden select-none" 
+              data-meme-container
               onMouseMove={handleMouseMove} 
               onMouseUp={handleMouseUp} 
               onMouseLeave={handleMouseUp} 

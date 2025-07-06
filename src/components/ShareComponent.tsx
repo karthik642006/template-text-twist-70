@@ -1,10 +1,42 @@
 
 import { Button } from "@/components/ui/button";
 import { Share } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const ShareComponent = () => {
-  const handleShareClick = () => {
+  const { toast } = useToast();
+
+  const handleShareClick = async () => {
     console.log("Share component clicked");
+    
+    try {
+      // Check if Web Share API is supported
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Check out this meme!',
+          text: 'I created this awesome meme!',
+          url: window.location.href,
+        });
+        toast({
+          title: "Shared successfully!",
+          description: "Your meme has been shared."
+        });
+      } else {
+        // Fallback: Copy URL to clipboard
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Link copied!",
+          description: "Meme link copied to clipboard. Share it anywhere!"
+        });
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      toast({
+        title: "Share failed",
+        description: "Unable to share. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
