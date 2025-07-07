@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +17,7 @@ import {
   Layers
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const VideoEditor = () => {
   const [uploadedVideo, setUploadedVideo] = useState<string | null>(null);
@@ -36,31 +36,6 @@ const VideoEditor = () => {
   const [bottomText, setBottomText] = useState("");
   const [customText, setCustomText] = useState("");
   const [backgroundMusic, setBackgroundMusic] = useState<string | null>(null);
-
-  // Mock video search results (in real app, this would use Pexels API)
-  const mockSearchResults = [
-    {
-      id: 1,
-      url: "https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0fd273d2c6d9a064f3ae35579b2bbdf&profile_id=139&oauth2_token_id=57447761",
-      thumbnail: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400",
-      title: "Nature Landscape",
-      duration: "0:30"
-    },
-    {
-      id: 2,
-      url: "https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0fd273d2c6d9a064f3ae35579b2bbdf&profile_id=139&oauth2_token_id=57447761",
-      thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400",
-      title: "Ocean Waves",
-      duration: "0:45"
-    },
-    {
-      id: 3,
-      url: "https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0fd273d2c6d9a064f3ae35579b2bbdf&profile_id=139&oauth2_token_id=57447761",
-      thumbnail: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
-      title: "Mountain View",
-      duration: "1:15"
-    }
-  ];
 
   const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -89,15 +64,34 @@ const VideoEditor = () => {
 
     setIsSearching(true);
     
-    // Simulate API call delay
-    setTimeout(() => {
-      setSearchResults(mockSearchResults);
+    try {
+      const { data, error } = await supabase.functions.invoke('search-videos', {
+        body: { 
+          query: searchQuery,
+          page: 1,
+          per_page: 15
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.videos) {
+        setSearchResults(data.videos);
+        toast.success(`Found ${data.videos.length} videos`);
+      } else {
+        toast.error("No videos found");
+        setSearchResults([]);
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      toast.error("Failed to search videos. Please try again.");
+      setSearchResults([]);
+    } finally {
       setIsSearching(false);
-      toast.success(`Found ${mockSearchResults.length} videos`);
-    }, 1000);
+    }
   };
 
-  const selectVideoFromSearch = (video: typeof mockSearchResults[0]) => {
+  const selectVideoFromSearch = (video: typeof searchResults[0]) => {
     setSelectedVideo(video.url);
     toast.success(`Selected: ${video.title}`);
   };
@@ -317,7 +311,7 @@ const VideoEditor = () => {
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <Search className="mr-2 h-5 w-5" />
-              Search Videos
+              Search Videos (Powered by Pexels)
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
