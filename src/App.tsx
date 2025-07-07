@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import MemeEditor from "./components/MemeEditor";
 import TemplateEditor from "./pages/TemplateEditor";
+import ImageToGif from "./pages/ImageToGif";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/editor/:templateId" element={<MemeEditor />} />
           <Route path="/template-editor" element={<TemplateEditor />} />
+          <Route path="/image-to-gif" element={<ImageToGif />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

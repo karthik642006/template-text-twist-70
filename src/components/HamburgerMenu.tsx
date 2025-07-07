@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ const HamburgerMenu = () => {
     { title: "Home", path: "/" },
     { title: "Meme Editor", path: "/editor/blank" },
     { title: "Template Editor", path: "/template-editor" },
+    { title: "Image to GIF", path: "/image-to-gif" },
     { title: "About Us", path: "/about" },
     { title: "Pricing", path: "/pricing" },
   ];
