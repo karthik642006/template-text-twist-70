@@ -1,8 +1,1 @@
-
 project_id = "sqmxkkgujfnycogvxdqw"
-
-[functions.generate-meme-image]
-verify_jwt = false
-
-[functions.search-templates]
-verify_jwt = false
