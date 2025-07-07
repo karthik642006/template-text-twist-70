@@ -14,6 +14,7 @@ const HamburgerMenu = () => {
     { title: "Meme Editor", path: "/editor/blank" },
     { title: "Template Editor", path: "/template-editor" },
     { title: "Image to GIF", path: "/image-to-gif" },
+    { title: "Video Editor", path: "/video-editor" },
     { title: "About Us", path: "/about" },
     { title: "Pricing", path: "/pricing" },
   ];
