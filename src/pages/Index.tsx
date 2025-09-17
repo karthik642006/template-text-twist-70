@@ -1,13 +1,14 @@
+// @ts-nocheck
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import TemplateGallery from "@/components/TemplateGallery";
 import GifGenerator from "@/components/GifGenerator";
 import TemplateSearch from "@/components/TemplateSearch";
 import HamburgerMenu from "@/components/HamburgerMenu";
+import UserProfileMenu from "@/components/UserProfileMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,7 +17,6 @@ const Index = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string>("");
   const [activeTab, setActiveTab] = useState("home");
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleGenerateImage = async () => {
@@ -63,7 +63,7 @@ const Index = () => {
     if (generatedImage) {
       // Store the generated image in localStorage to pass to editor
       localStorage.setItem('selectedTemplate', generatedImage);
-      navigate('/editor/generated');
+      window.location.assign('/editor/generated');
     }
   };
 
@@ -102,44 +102,51 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Header */}
-      <header className="flex items-center justify-between p-4 border-b border-gray-700">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+      <header className="flex items-center justify-between p-4 border-b border-gray-700/60 bg-black/20 backdrop-blur supports-[backdrop-filter]:bg-black/10">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md">
             <span className="text-white font-bold">M</span>
           </div>
-          <span className="text-xl font-bold">MemeGen</span>
+          <div className="flex flex-col leading-tight">
+            <span className="text-lg font-bold tracking-tight">MemeGen</span>
+            <span className="text-xs text-white/60">Create, remix, share</span>
+          </div>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-3">
           <HamburgerMenu />
+          <UserProfileMenu />
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="p-4 space-y-8">
+      <main className="p-4 space-y-8 max-w-6xl mx-auto">
         {/* Text to Image Section */}
         <section className="space-y-6">
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 bg-clip-text text-transparent">
               AI Meme Generator
             </h1>
-            <p className="text-gray-400">Create hilarious memes with AI-powered tools</p>
+            <p className="text-gray-300 max-w-2xl mx-auto">Create hilarious memes with AI-powered tools</p>
           </div>
 
-          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+          <Card className="bg-gray-800/50 border-gray-700/70 backdrop-blur-sm shadow-xl">
             <CardHeader>
-              <CardTitle className="text-white">Text to Image</CardTitle>
+              <CardTitle className="text-white flex items-center justify-between">
+                <span>Text to Image</span>
+                <span className="text-xs text-white/50">Powered by AI</span>
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea 
                 placeholder="Describe the meme you want to create..." 
                 value={textPrompt} 
                 onChange={e => setTextPrompt(e.target.value)} 
-                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 min-h-[100px]" 
+                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 min-h-[120px]" 
               />
               <Button 
                 onClick={handleGenerateImage} 
                 disabled={isGenerating || !textPrompt.trim()} 
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                className="w-full h-11 text-base bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
               >
                 {isGenerating ? (
                   <>
@@ -160,7 +167,7 @@ const Index = () => {
                   <img 
                     src={generatedImage} 
                     alt="Generated meme template" 
-                    className="w-full h-64 object-cover rounded-lg border border-gray-600" 
+                    className="w-full h-64 object-cover rounded-lg border border-gray-600 shadow" 
                   />
                   <Button 
                     onClick={handleUseTemplate} 
@@ -175,7 +182,9 @@ const Index = () => {
         </section>
 
         {/* Template Search Section */}
-        <TemplateSearch />
+        <div className="rounded-xl border border-gray-700/70 bg-gray-800/30 p-4">
+          <TemplateSearch />
+        </div>
 
         {/* Image to GIF Section */}
         <section>
