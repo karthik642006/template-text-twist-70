@@ -8,6 +8,7 @@ import TemplateGallery from "@/components/TemplateGallery";
 import GifGenerator from "@/components/GifGenerator";
 import TemplateSearch from "@/components/TemplateSearch";
 import HamburgerMenu from "@/components/HamburgerMenu";
+import UserProfileMenu from "@/components/UserProfileMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -110,36 +111,46 @@ const Index = () => {
           <span className="text-xl font-bold">MemeGen</span>
         </div>
         <div className="flex items-center space-x-4">
+          <UserProfileMenu />
           <HamburgerMenu />
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="p-4 space-y-8">
+      <main className="p-4 space-y-10">
         {/* Text to Image Section */}
-        <section className="space-y-6">
-          <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              AI Meme Generator
+        <section className="space-y-8">
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 border border-white/10">
+              <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-xs text-gray-300">New: Text → Image generation</span>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-teal-300 to-purple-400 bg-clip-text text-transparent">
+              Make memes in seconds with AI
             </h1>
-            <p className="text-gray-400">Create hilarious memes with AI-powered tools</p>
+            <p className="text-gray-300 text-sm md:text-base">
+              Type what you want, pick a template, and style it. No design skills needed.
+            </p>
           </div>
 
-          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+          <Card className="bg-gray-800/50 border-gray-700/70 backdrop-blur-sm shadow-xl">
             <CardHeader>
-              <CardTitle className="text-white">Text to Image</CardTitle>
+              <CardTitle className="text-white flex items-center gap-2">
+                <span className="inline-block h-2 w-2 rounded-full bg-blue-400" />
+                Text to Image
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea 
                 placeholder="Describe the meme you want to create..." 
                 value={textPrompt} 
                 onChange={e => setTextPrompt(e.target.value)} 
-                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 min-h-[100px]" 
+                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 min-h-[120px] focus-visible:ring-2 focus-visible:ring-blue-500/40" 
               />
               <Button 
                 onClick={handleGenerateImage} 
                 disabled={isGenerating || !textPrompt.trim()} 
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg"
               >
                 {isGenerating ? (
                   <>
@@ -160,7 +171,7 @@ const Index = () => {
                   <img 
                     src={generatedImage} 
                     alt="Generated meme template" 
-                    className="w-full h-64 object-cover rounded-lg border border-gray-600" 
+                    className="w-full h-64 object-cover rounded-lg border border-gray-600 shadow-md" 
                   />
                   <Button 
                     onClick={handleUseTemplate} 
