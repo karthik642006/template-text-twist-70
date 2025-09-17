@@ -5,10 +5,12 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": ["react", "react-dom", "react/jsx-runtime", "node"],
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
