@@ -8,6 +8,7 @@ import TemplateGallery from "@/components/TemplateGallery";
 import GifGenerator from "@/components/GifGenerator";
 import TemplateSearch from "@/components/TemplateSearch";
 import HamburgerMenu from "@/components/HamburgerMenu";
+import UserMenu from "@/components/UserMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -110,6 +111,7 @@ const Index = () => {
           <span className="text-xl font-bold">MemeGen</span>
         </div>
         <div className="flex items-center space-x-4">
+          <UserMenu />
           <HamburgerMenu />
         </div>
       </header>
